@@ -125,7 +125,7 @@ import "./ChatPage.css";
 
 // Use environment variable if available, else fallback to localhost for dev
 const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "https://my-backend.onrender.com";
+  process.env.REACT_APP_API_URL || "http://localhost:5000/api/chatbot/sessionId/${sessionId}";
 
 const ChatPage = () => {
   const [message, setMessage] = useState("");
@@ -237,6 +237,7 @@ const ChatPage = () => {
 };
 
 export default ChatPage;
+
 
 
 
