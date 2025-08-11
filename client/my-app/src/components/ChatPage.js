@@ -1,144 +1,19 @@
-// import React, { useState, useEffect, useRef } from "react";
-// import axios from "axios";
-// import { useNavigate } from "react-router-dom";
-// import "./ChatPage.css"; // Import the CSS file
-
-// const ChatPage = () => {
-//   const [message, setMessage] = useState("");
-//   const [conversation, setConversation] = useState([]);
-//   const [sessionId, setSessionId] = useState(localStorage.getItem("sessionId") || null);
-//   const navigate = useNavigate();
-//   const chatEndRef = useRef(null);
-
-//   useEffect(() => {
-//     if (sessionId) {
-//       axios
-//         .get(`http://localhost:5000/api/chatbot/sessionId/${sessionId}`)
-//         .then((response) => {
-//           setConversation(response.data.conversation);
-//         })
-//         .catch((error) => {
-//           console.error("Error fetching conversation:", error);
-//         });
-//     }
-//   }, [sessionId]);
-
-//   useEffect(() => {
-//     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-//   }, [conversation]);
-
-//   const sendMessage = async () => {
-//     if (!message.trim()) return;
-
-//     const newMessage = { sender: "user", message };
-//     setConversation((prev) => [...prev, newMessage]);
-//     setMessage("");
-
-//     try {
-//       const response = await axios.post("http://localhost:5000/api/chatbot/conversation", {
-//         message,
-//         sessionId,
-//       });
-
-//       setSessionId(response.data.sessionId);
-//       localStorage.setItem("sessionId", response.data.sessionId);
-
-//       const botResponse = { sender: "bot", message: response.data.reply };
-//       setConversation((prev) => [...prev, botResponse]);
-//     } catch (error) {
-//       console.error("Error sending message:", error);
-//     }
-//   };
-
-//   const handleLogout = () => {
-//     localStorage.removeItem("sessionId");
-//     setSessionId(null);
-//     setConversation([]);
-//     navigate("/");
-//   };
-
-//   const handleCreateCampaign = () => {
-//     navigate("/create-campaign");
-//   };
-
-//   return (
-//     <div className="chat-container">
-//       <div className="chat-header">
-//         <h2>AI Chat Assistant</h2>
-//         <div>
-//           <button className="btn campaign-btn" onClick={handleCreateCampaign}>Create Campaign</button>
-//           <button className="btn logout-btn" onClick={handleLogout}>Logout</button>
-//         </div>
-//       </div>
-
-//       {/* Chat Box */}
-//       <div className="chat-box-container">
-//         <div className="chat-box">
-//           {conversation.map((msg, index) => (
-//             <div key={index} className={msg.sender === "user" ? "message user" : "message bot"}>
-//               <strong>{msg.sender === "user" ? "You:" : "AI:"}</strong>
-//               {msg.sender === "bot" ? (
-//                 msg.message.split('\n').map((line, lineIndex) => (
-//                   <p key={lineIndex}>{line}</p>
-//                 ))
-//               ) : (
-//                 <p>{msg.message}</p>
-//               )}
-//             </div>
-//           ))}
-//           <div ref={chatEndRef}></div>
-//         </div>
-//       </div>
-
-//       {/* Input Field */}
-//       <div className="chat-input">
-//         <input
-//           type="text"
-//           value={message}
-//           onChange={(e) => setMessage(e.target.value)}
-//           placeholder="Type a message..."
-//           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-//         />
-//         <button onClick={sendMessage}>Send</button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ChatPage;
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./ChatPage.css";
-
-// Use environment variable if available, else fallback to localhost for dev
-const API_BASE_URL = "http://localhost:5000/api/chatbot/sessionId/${sessionId}";
+import "./ChatPage.css"; // Import the CSS file
 
 const ChatPage = () => {
   const [message, setMessage] = useState("");
   const [conversation, setConversation] = useState([]);
-  const [sessionId, setSessionId] = useState(
-    localStorage.getItem("sessionId") || null
-  );
+  const [sessionId, setSessionId] = useState(localStorage.getItem("sessionId") || null);
   const navigate = useNavigate();
   const chatEndRef = useRef(null);
 
   useEffect(() => {
     if (sessionId) {
       axios
-        .get(`${API_BASE_URL}/api/chat/session/${sessionId}`)
+        .get(`http://localhost:5000/api/chatbot/sessionId/${sessionId}`)
         .then((response) => {
           setConversation(response.data.conversation);
         })
@@ -160,7 +35,7 @@ const ChatPage = () => {
     setMessage("");
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/chat/message`, {
+      const response = await axios.post("http://localhost:5000/api/chatbot/conversation", {
         message,
         sessionId,
       });
@@ -191,25 +66,19 @@ const ChatPage = () => {
       <div className="chat-header">
         <h2>AI Chat Assistant</h2>
         <div>
-          <button className="btn campaign-btn" onClick={handleCreateCampaign}>
-            Create Campaign
-          </button>
-          <button className="btn logout-btn" onClick={handleLogout}>
-            Logout
-          </button>
+          <button className="btn campaign-btn" onClick={handleCreateCampaign}>Create Campaign</button>
+          <button className="btn logout-btn" onClick={handleLogout}>Logout</button>
         </div>
       </div>
 
+      {/* Chat Box */}
       <div className="chat-box-container">
         <div className="chat-box">
           {conversation.map((msg, index) => (
-            <div
-              key={index}
-              className={msg.sender === "user" ? "message user" : "message bot"}
-            >
+            <div key={index} className={msg.sender === "user" ? "message user" : "message bot"}>
               <strong>{msg.sender === "user" ? "You:" : "AI:"}</strong>
               {msg.sender === "bot" ? (
-                msg.message.split("\n").map((line, lineIndex) => (
+                msg.message.split('\n').map((line, lineIndex) => (
                   <p key={lineIndex}>{line}</p>
                 ))
               ) : (
@@ -221,6 +90,7 @@ const ChatPage = () => {
         </div>
       </div>
 
+      {/* Input Field */}
       <div className="chat-input">
         <input
           type="text"
@@ -236,6 +106,137 @@ const ChatPage = () => {
 };
 
 export default ChatPage;
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState, useEffect, useRef } from "react";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+// import "./ChatPage.css";
+
+// // Use environment variable if available, else fallback to localhost for dev
+// const API_BASE_URL = "http://localhost:5000/api/chatbot/sessionId/${sessionId}";
+
+// const ChatPage = () => {
+//   const [message, setMessage] = useState("");
+//   const [conversation, setConversation] = useState([]);
+//   const [sessionId, setSessionId] = useState(
+//     localStorage.getItem("sessionId") || null
+//   );
+//   const navigate = useNavigate();
+//   const chatEndRef = useRef(null);
+
+//   useEffect(() => {
+//     if (sessionId) {
+//       axios
+//         .get(`${API_BASE_URL}/api/chat/session/${sessionId}`)
+//         .then((response) => {
+//           setConversation(response.data.conversation);
+//         })
+//         .catch((error) => {
+//           console.error("Error fetching conversation:", error);
+//         });
+//     }
+//   }, [sessionId]);
+
+//   useEffect(() => {
+//     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+//   }, [conversation]);
+
+//   const sendMessage = async () => {
+//     if (!message.trim()) return;
+
+//     const newMessage = { sender: "user", message };
+//     setConversation((prev) => [...prev, newMessage]);
+//     setMessage("");
+
+//     try {
+//       const response = await axios.post(`${API_BASE_URL}/api/chat/message`, {
+//         message,
+//         sessionId,
+//       });
+
+//       setSessionId(response.data.sessionId);
+//       localStorage.setItem("sessionId", response.data.sessionId);
+
+//       const botResponse = { sender: "bot", message: response.data.reply };
+//       setConversation((prev) => [...prev, botResponse]);
+//     } catch (error) {
+//       console.error("Error sending message:", error);
+//     }
+//   };
+
+//   const handleLogout = () => {
+//     localStorage.removeItem("sessionId");
+//     setSessionId(null);
+//     setConversation([]);
+//     navigate("/");
+//   };
+
+//   const handleCreateCampaign = () => {
+//     navigate("/create-campaign");
+//   };
+
+//   return (
+//     <div className="chat-container">
+//       <div className="chat-header">
+//         <h2>AI Chat Assistant</h2>
+//         <div>
+//           <button className="btn campaign-btn" onClick={handleCreateCampaign}>
+//             Create Campaign
+//           </button>
+//           <button className="btn logout-btn" onClick={handleLogout}>
+//             Logout
+//           </button>
+//         </div>
+//       </div>
+
+//       <div className="chat-box-container">
+//         <div className="chat-box">
+//           {conversation.map((msg, index) => (
+//             <div
+//               key={index}
+//               className={msg.sender === "user" ? "message user" : "message bot"}
+//             >
+//               <strong>{msg.sender === "user" ? "You:" : "AI:"}</strong>
+//               {msg.sender === "bot" ? (
+//                 msg.message.split("\n").map((line, lineIndex) => (
+//                   <p key={lineIndex}>{line}</p>
+//                 ))
+//               ) : (
+//                 <p>{msg.message}</p>
+//               )}
+//             </div>
+//           ))}
+//           <div ref={chatEndRef}></div>
+//         </div>
+//       </div>
+
+//       <div className="chat-input">
+//         <input
+//           type="text"
+//           value={message}
+//           onChange={(e) => setMessage(e.target.value)}
+//           placeholder="Type a message..."
+//           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+//         />
+//         <button onClick={sendMessage}>Send</button>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ChatPage;
+
 
 
 
