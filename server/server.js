@@ -33,6 +33,17 @@ connectDB();
 // Middleware to parse JSON
 app.use(express.json());
 
+app.use((req, res, next) => {
+  res.header(
+    "Access-Control-Allow-Origin",
+    "React app URL"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
+
+
 // ✅ Allow both local dev and deployed frontend
 const allowedOrigins = [
   'http://localhost:3000', // local React
@@ -51,6 +62,7 @@ app.options('*', cors());
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
 
 
