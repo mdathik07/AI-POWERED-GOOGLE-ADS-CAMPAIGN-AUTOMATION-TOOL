@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://add-backend-me45.onrender.com';
 
 export const API_ENDPOINTS = {
   AUTH: {
@@ -14,5 +14,6 @@ export const API_ENDPOINTS = {
     LAUNCH: `${API_BASE_URL}/api/campaign/launch`,
   },
 };
+
 
 export default API_BASE_URL; 
