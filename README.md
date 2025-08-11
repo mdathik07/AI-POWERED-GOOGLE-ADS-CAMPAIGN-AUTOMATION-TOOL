@@ -110,6 +110,8 @@ The application will be available at `http://localhost:3000`
 - `POST /api/campaign/generate` - Generate new campaign
 - `POST /api/campaign/launch` - Launch campaign
 - `GET /api/campaign/status` - Get campaign status
+##This Project is running at this url
+https://repo1-frontend.vercel.app/
 
 ## Contributing
 
@@ -128,3 +130,4 @@ https://youtu.be/6GG_6zgQanM
 
 Md Athik - www.mohdathik@gmail.com
 Project Link: https://github.com/mdathik07/AI-POWERED-GOOGLE-ADS-CAMPAIGN-AUTOMATION-PLATFORM 
+
