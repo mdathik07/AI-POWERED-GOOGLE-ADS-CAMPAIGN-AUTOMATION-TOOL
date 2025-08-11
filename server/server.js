@@ -33,24 +33,19 @@ connectDB();
 // Middleware to parse JSON
 app.use(express.json());
 
-app.use((req, res, next) => {
-  res.header(
-    "Access-Control-Allow-Origin",
-    "React app URL"
-  );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  next();
-});
+const corsOptions = {
+  origin: [
+    'https://add-frontend.onrender.com',
+    'http://localhost:3000',
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
 
+app.use(cors(corsOptions));
 
-// ✅ Allow both local dev and deployed frontend
-const allowedOrigins = [
-  'http://localhost:3000', // local React
-  'https://add-frontend.onrender.com' // deployed frontend
-];
-
-app.use(cors());
 
 // API routes
 app.use('/api/auth', require('./routes/auth'));
@@ -62,6 +57,7 @@ app.options('*', cors());
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
 
 
