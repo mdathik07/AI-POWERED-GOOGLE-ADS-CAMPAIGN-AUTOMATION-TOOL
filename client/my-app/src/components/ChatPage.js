@@ -123,12 +123,16 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./ChatPage.css";
 
-const API_BASE_URL = "https://add-backend-me45.onrender.com";
+// Use environment variable if available, else fallback to localhost for dev
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 const ChatPage = () => {
   const [message, setMessage] = useState("");
   const [conversation, setConversation] = useState([]);
-  const [sessionId, setSessionId] = useState(localStorage.getItem("sessionId") || null);
+  const [sessionId, setSessionId] = useState(
+    localStorage.getItem("sessionId") || null
+  );
   const navigate = useNavigate();
   const chatEndRef = useRef(null);
 
@@ -200,7 +204,10 @@ const ChatPage = () => {
       <div className="chat-box-container">
         <div className="chat-box">
           {conversation.map((msg, index) => (
-            <div key={index} className={msg.sender === "user" ? "message user" : "message bot"}>
+            <div
+              key={index}
+              className={msg.sender === "user" ? "message user" : "message bot"}
+            >
               <strong>{msg.sender === "user" ? "You:" : "AI:"}</strong>
               {msg.sender === "bot" ? (
                 msg.message.split("\n").map((line, lineIndex) => (
@@ -230,5 +237,7 @@ const ChatPage = () => {
 };
 
 export default ChatPage;
+
+
 
 
